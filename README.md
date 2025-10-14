@@ -28,12 +28,10 @@ If you need to customize the Airflow deployment you can edit [values.yaml](k8s/v
 
 if you need to tune [Airflow configuration](https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html) you can add the corresponding environment variables in the `env` section of `values.yaml`.
 
-The default `values.yaml` of the source Helm chart can be seen [here](https://github.com/apache/airflow/blob/main/chart/values.yaml). 
-
 ## DAG deployment
 DAGs are deployed via GitSync.
 
-GitSync acts as a side car container alongside the other Airflow pods, synchronising the `dags/` folder in the pods with the DAGs located in a Git repo of your choice (in this case https://github.com/guidok91/airflow/tree/master/dags).
+GitSync acts as a side car container alongside the other Airflow pods, synchronising the `dags/` folder in the pods with the DAGs located in a Git repo of your choice (in this case https://github.com/Arjunreddypulugu/Production-Grade-Airflow-on-Kubernetes/tree/master/dags).
 
 ## Custom Docker image for pods
 A custom [Docker image](Dockerfile) is provided for the pods. Here we can install the Airflow dependencies we need.
