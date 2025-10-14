@@ -1,0 +1,66 @@
+airflowVersion: "3.0.1"
+
+images:
+  airflow:
+    repository: airflow-custom
+    tag: latest
+
+executor: "KubernetesExecutor"
+
+env:
+- name: "ENV"
+  value: "development"
+- name: "AIRFLOW__CORE__LOAD_EXAMPLES"
+  value: "false"
+- name: AIRFLOW__API_AUTH__JWT_SECRET
+  value: "b7e2f8c9d4a1e6f3b2c5d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8"
+
+data:
+  metadataConnection:
+    user: postgres
+    pass: postgres
+    protocol: postgresql
+    host: ~
+    port: 5432
+    db: postgres
+    sslmode: disable
+
+scheduler:
+  replicas: 1
+
+apiServer:
+  replicas: 1
+
+triggerer:
+  enabled: false
+
+statsd:
+  enabled: true
+
+cleanup:
+  enabled: true
+  schedule: "*/30 * * * *"
+  command: ~
+  args: ["bash", "-c", "exec airflow kubernetes cleanup-pods --namespace={{ .Release.Namespace }}"]
+
+postgresql:
+  enabled: true
+  auth:
+    enablePostgresUser: true
+    postgresPassword: postgres
+    username: postgres
+    password: postgres
+
+dags:
+  gitSync:
+    enabled: true
+    repo: https://github.com/guidok91/airflow.git
+    branch: master
+    subPath: "dags"
+
+logs:
+  persistence:
+    enabled: true
+    size: 100Gi
+    storageClassName:
+    existingClaim: airflow-logs
